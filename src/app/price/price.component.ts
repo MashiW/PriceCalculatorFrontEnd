@@ -20,15 +20,14 @@ export class PriceComponent implements OnInit {
   public priceRequest: PriceRequest;
   private selectedProduct: string;
   public summaryItems: OrderItemTotalPricePayload[];
-  counter(i: number) {
-    return new Array(i);
-  }
+  public netTotal: number;
 
   constructor(private router: Router,
               private productService: ProductService,
               private priceService: PriceService) {
     this.itemPriceRequests = [];
     this.summaryItems = [];
+    this.netTotal =0;
   }
 
   ngOnInit(): void {
@@ -46,7 +45,7 @@ export class PriceComponent implements OnInit {
   getProductName(id: String) {
     console.log("Called :"+id);
     return this.products
-      .filter((p) => p.productId === id);
+      .filter((p) => p.productId === id)[0];
   }
 
   getProductId(id: String) {
@@ -56,7 +55,7 @@ export class PriceComponent implements OnInit {
 
   addNewItem() {
     this.itemPriceRequests.push({
-      productId: this.products[this.products.length-1].productId,
+      productId: this.products[0].productId,
       itemCount: 0
     });
   }
@@ -67,12 +66,12 @@ export class PriceComponent implements OnInit {
   }
 
   calculatePrice() {
-    console.log("REQ "+this.itemPriceRequests);
     this.priceService.sendPriceRequest(this.itemPriceRequests[this.itemPriceRequests.length-1]).subscribe(
       (response: ApiResponse<OrderItemTotalPricePayload>) =>{
         if(response.code === 'SUCCESS'){
             this.summaryItems.push(response.payload);
-            console.log("W "+this.summaryItems[0].productId);
+            console.log("W "+this.summaryItems[this.summaryItems.length-1].productId);
+            this.updateTotalPrice();
         }
         else {
           alert("Error "+ response.code);
@@ -80,8 +79,14 @@ export class PriceComponent implements OnInit {
       }
     );
   }
+  updateTotalPrice(){
+    for(let n = 0; n < this.summaryItems.length; ++n){
+      this.netTotal += this.summaryItems[n].grossTotal;
+    }
+  }
 
   selectChangeHandler(e) {
     this.itemPriceRequests[0].productId = e.target.value;
+    alert(this.itemPriceRequests[0].productId);
   }
 }

@@ -81,3 +81,26 @@ th{
   width: 200px;
   height: 25px;
 }
+.prod-list{
+  width: 70%;
+  margin: auto;
+}
+.prod-label{
+  font-size: 14px;
+  font-weight: bold;
+  text-align: left;
+}
+.prod-price{
+  text-align: right;
+  font-weight: bold;
+  float: right;
+  font-size: 14px;
+}
+.sub-topic{
+  text-underline-style: dash;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.btn-buy-div{
+  text-align: center;
+}

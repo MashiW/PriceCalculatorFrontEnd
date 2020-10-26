@@ -25,7 +25,7 @@
           </label>
         </td>
         <td class="center-text">
-          <input [(ngModel)]="itemPriceRequests[i].itemCount" type="text"/>
+          <input [(ngModel)]="itemPriceRequests[i].itemCount" type="number" min="1"/>
         </td>
         <td class="center-text">
           <input (click)="calculatePrice()" class="button ui-button" type="button" value="Calculate Price"/>
@@ -46,19 +46,19 @@
   <div class="price-summary">
     <div class="summary-head">
       <h2>Price Summary</h2>
-      Selected Products:
-      <div *ngIf="summaryItems.length != 0">
-<!--        <li *ngFor='let in of counter(5) ;let i = index'>{{i}}</li>-->
-        <div *ngFor='let it of summaryItems; let i = index'>
-          <label> {{getProductName(summaryItems[i].productId).toString()}}:</label>{{summaryItems[i].grossTotal}}
-        </div>
+      <label class="sub-topic">Selected Products</label>
+    </div>
+    <div *ngIf="summaryItems.length != 0" class="prod-list">
+      <div *ngFor='let it of summaryItems; let i = index'>
+        <label class="prod-label"> {{getProductName(summaryItems[i].productId).productName}}:</label>
+        <label class="prod-price">{{summaryItems[i].grossTotal}}</label>
       </div>
-      <div>
-        <h3>Order Total: </h3>
-      </div>
-      <div>
-        <input type="button" class="button btn-buy" value="Buy Now">
-      </div>
+    </div>
+    <div class="prod-list">
+      <h3>Order Total: <label class="prod-price">{{this.netTotal | number : '1.2'}}</label></h3>
+    </div>
+    <div class="btn-buy-div">
+      <input type="button" class="button btn-buy" value="Buy Now">
     </div>
   </div>
 </div>

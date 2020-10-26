@@ -1,37 +1,66 @@
-<p>product works!</p>
-
-<table class="table table-bordered">
-  <thead class="thead-light">
-  <tr class="detail-view-table-header">
-    <th class=""><div class="">Product Id</div></th>
-    <th class=""><div class="">Product Name</div></th>
-    <th class=""><div class="">Carton Size</div></th>
-    <th class=""><div class="">Carton Price</div></th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let product of products | paginate:{ id: 'prod_pagination',
-                                                           itemsPerPage: itemsPerPage,
+<div class="main_container">
+  <table class="table table-bordered">
+    <thead class="thead-light">
+    <tr class="detail-view-table-header">
+      <th class="">
+        <div>Product Id</div>
+      </th>
+      <th class="">
+        <div>Product Name</div>
+      </th>
+      <th class="">
+        <div>Carton Size</div>
+      </th>
+      <th class="">
+        <div>Carton Price</div>
+      </th>
+      <th class="">
+        <div>Unit Price</div>
+      </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let product of products | paginate:{ id: 'prod_pagination',
+                                                           itemsPerPage: pageSize,
                                                            currentPage: page,
-                                                           totalItems: totalRecords }
-        let i = index" class="detail-view-table-row">
-    <td>{{product.productId}}</td>
-    <td>{{product.productName}}</td>
-    <td>{{product.cartonSize}}</td>
-    <td>{{product.cartonPrice}}</td>
-  </tr>
-  <tr *ngIf="totalRecords == 0">
-    <td colspan="3"><i>No records has found.</i></td>
-  </tr>
-  <tr *ngIf="totalRecords != 0">
-    <td colspan="3">Total number of records has found: &nbsp; <b>{{totalRecords}}</b></td>
-  </tr>
-  </tbody>
-</table>
-<div class="row">
-  <div aria-label="Page navigation example" style="margin: auto;">
-    <pagination-controls (pageChange)="getCurrentPage($event)" directionLinks="true" id="prod_pagination"
-                         maxSize="5" previousLabel="" nextLabel="" class="cutom-pg">
-    </pagination-controls>
+                                                           totalItems: totalRecords }" class="detail-view-table-row">
+      <td class="center-text">{{product.productId}}</td>
+      <td>{{product.productName}}</td>
+      <td class="center-text">{{product.productMeta.cartonSize}}</td>
+      <td class="center-text">{{product.productMeta.cartonPrice}}</td>
+      <td>{{product.unitPrice}}</td>
+    </tr>
+    <tr>
+      <td colspan="5"><br/></td>
+    </tr>
+    <tr *ngIf="totalRecords == 0">
+      <td colspan="5"><i>No records found.</i></td>
+    </tr>
+    <tr *ngIf="totalRecords != 0">
+      <td colspan="5">Total number of records found: &nbsp; <b>{{totalRecords}}</b></td>
+    </tr>
+    </tbody>
+  </table>
+
+  <div class="row-spacer row-detail">
+    <div class="flex-child">
+      Items per Page:
+      <select (change)="handlePageSizeChange($event)">
+        <option *ngFor="let size of pageSizes" [ngValue]="pageSize">
+          {{ size }}
+        </option>
+      </select>
+    </div>
+    <div class="flex-child">
+      <div aria-label="Page navigation example" style="margin: auto;">
+        <pagination-controls (pageChange)="getCurrentPage($event)"
+                             (pageBoundsCorrection)="getCurrentPage($event)"
+                             directionLinks="true"
+                             id="prod_pagination"
+                             nextLabel=""
+                             previousLabel="">
+        </pagination-controls>
+      </div>
+    </div>
   </div>
 </div>

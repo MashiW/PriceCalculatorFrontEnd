@@ -2,14 +2,13 @@ export class Product{
   productId: string;
   productName: string;
   unitPrice: number;
-  meta: Meta = new Meta;
+  productMeta: ProductMeta = new ProductMeta;
 }
-export class Meta{
+export class ProductMeta{
   cartonSize: number;
   cartonPrice: number;
 }
 
 export class ProductPayload {
-  public rowCount: number;
   public content: Product[];
 }

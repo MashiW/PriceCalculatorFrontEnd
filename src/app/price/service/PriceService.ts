@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
+import {PriceRequest} from "../model/price-model";
 @Injectable({
   providedIn: 'root'
 })
-export class ProductService{
+export class PriceService {
 
   constructor(private http: HttpClient) {
   }
 
-  getAllProducts(offset, limit){
-     return this.http.get(
-            `${environment.API_BASE_URL}/api/product/all?`+ 'offset=' + offset + '&' + 'limit=' + limit);
+  sendPriceRequest(priceRequest: PriceRequest){
+    return this.http.post(`${environment.API_BASE_URL}/api/price/cal`, priceRequest);
   }
 }

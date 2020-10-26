@@ -1,0 +1,64 @@
+<div class="price-main-div">
+  <div class="main_container-price">
+    <table class="table table-bordered">
+      <thead class="thead-light">
+      <tr class="detail-view-table-header">
+        <th class="">
+          <div>Product Name</div>
+        </th>
+        <th class="">
+          <div>Number of Items</div>
+        </th>
+        <th class="">
+          <div>Actions</div>
+        </th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let item of itemPriceRequests; let i = index" class="detail-view-table-row">
+        <td class="center-text">
+          <label>
+            <select (click)="selectChangeHandler($event)" class="prod-select">
+              <!--            <option value="{{getProductName(item.productId)}}">{{getProductName(item.productId)}}</option>-->
+              <option *ngFor="let p of products" value="{{p.productId}}">{{p.productName}}</option>
+            </select>
+          </label>
+        </td>
+        <td class="center-text">
+          <input [(ngModel)]="itemPriceRequests[i].itemCount" type="text"/>
+        </td>
+        <td class="center-text">
+          <input (click)="calculatePrice()" class="button ui-button" type="button" value="Calculate Price"/>
+          <input (click)="removeItem(i)" class="button remove-btn" type="button" value="Remove"/>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="5"><br/></td>
+      </tr>
+      <tr>
+        <td class="btn-row" colspan="5">
+          <input (click)="addNewItem()" class="button add-button" type="button" value="+ Click to Add Product"/>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="price-summary">
+    <div class="summary-head">
+      <h2>Price Summary</h2>
+      Selected Products:
+      <div *ngIf="summaryItems.length != 0">
+<!--        <li *ngFor='let in of counter(5) ;let i = index'>{{i}}</li>-->
+        <div *ngFor='let it of summaryItems; let i = index'>
+          <label> {{getProductName(summaryItems[i].productId).toString()}}:</label>{{summaryItems[i].grossTotal}}
+        </div>
+      </div>
+      <div>
+        <h3>Order Total: </h3>
+      </div>
+      <div>
+        <input type="button" class="button btn-buy" value="Buy Now">
+      </div>
+    </div>
+  </div>
+</div>

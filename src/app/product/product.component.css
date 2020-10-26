@@ -1,0 +1,30 @@
+.main_container{
+  margin: auto;
+  width: 60%;
+  display: grid;
+  border: 1px solid gray;
+}
+.table-bordered, th, tr, td{
+  border: 1px solid #878b8b;
+  border-collapse: collapse;
+  line-height: 25px;
+}
+th{
+  background-color: #1976d2;
+  color: white;
+}
+.row-spacer{
+  margin: 12px;
+}
+.row-detail{
+  display:flex;
+}
+.flex-child {
+  flex: 1;
+}
+.flex-child:first-child {
+  margin: auto;
+}
+.center-text{
+  text-align: center;
+}

@@ -57,8 +57,23 @@
     <div class="prod-list">
       <h3>Order Total: <label class="prod-price">{{this.netTotal | number : '1.2'}}</label></h3>
     </div>
-    <div class="btn-buy-div">
-      <input type="button" class="button btn-buy" value="Buy Now">
+    <div class="btn`-buy-div">
+      <input type="button" class="button btn-buy" value="Buy Now" id="buyBtn" (click)="buyModalDisplay($event)">
+    </div>
+  </div>
+
+  <div id="myModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="close" (click)="dismissModal()">&times;</span>
+        <h2>Proceed to Buy</h2>
+      </div>
+      <div class="modal-body">
+        <h4>Order Net Total: &nbsp;{{netTotal}}</h4>
+      </div>
+      <div class="modal-footer">
+        <input type="button" class="button modal-ok" value="Buy Now" id="modalOkBtn" (click)="dismissModal()">
+      </div>
     </div>
   </div>
 </div>

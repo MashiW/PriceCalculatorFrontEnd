@@ -89,4 +89,14 @@ export class PriceComponent implements OnInit {
     this.itemPriceRequests[0].productId = e.target.value;
     alert(this.itemPriceRequests[0].productId);
   }
+
+  buyModalDisplay(e) {
+    if (e.target.click) {
+      document.getElementById('myModal').style.display = "block";
+    }
+  }
+
+  dismissModal() {
+    document.getElementById('myModal').style.display = "none";
+  }
 }

@@ -17,8 +17,6 @@ export class PriceComponent implements OnInit {
   public totalRecords: number;
   public products: Product[];
   public itemPriceRequests: PriceRequest[];
-  public priceRequest: PriceRequest;
-  private selectedProduct: string;
   public summaryItems: OrderItemTotalPricePayload[];
   public netTotal: number;
 
@@ -43,7 +41,6 @@ export class PriceComponent implements OnInit {
   }
 
   getProductName(id: String) {
-    console.log("Called :"+id);
     return this.products
       .filter((p) => p.productId === id)[0];
   }
@@ -54,8 +51,14 @@ export class PriceComponent implements OnInit {
     }
 
   addNewItem() {
+    let usedProducts = this.summaryItems
+      .map((i) => i.productId);
+
+    let nextPick = this.products
+      .filter((i) => !usedProducts.includes(i.productId))[0];
+
     this.itemPriceRequests.push({
-      productId: this.products[0].productId,
+      productId: nextPick.productId,
       itemCount: 0
     });
   }
@@ -65,12 +68,22 @@ export class PriceComponent implements OnInit {
     this.summaryItems.splice(i,1);
   }
 
-  calculatePrice() {
-    this.priceService.sendPriceRequest(this.itemPriceRequests[this.itemPriceRequests.length-1]).subscribe(
+  calculatePrice(i: number) {
+    let itemPriceRequest = this.itemPriceRequests[i];
+
+    this.priceService.sendPriceRequest(itemPriceRequest).subscribe(
       (response: ApiResponse<OrderItemTotalPricePayload>) =>{
         if(response.code === 'SUCCESS'){
-            this.summaryItems.push(response.payload);
-            console.log("W "+this.summaryItems[this.summaryItems.length-1].productId);
+            let itemIndex = this.summaryItems
+              .findIndex((i) => i.productId === response.payload.productId);
+
+            if(itemIndex >= 0) {
+              this.summaryItems[itemIndex] = response.payload;
+            }
+            else {
+              this.summaryItems.push(response.payload);
+            }
+
             this.updateTotalPrice();
         }
         else {
@@ -79,24 +92,26 @@ export class PriceComponent implements OnInit {
       }
     );
   }
+
   updateTotalPrice(){
+    this.netTotal = 0;
+
     for(let n = 0; n < this.summaryItems.length; ++n){
       this.netTotal += this.summaryItems[n].grossTotal;
     }
   }
 
-  selectChangeHandler(e) {
-    this.itemPriceRequests[0].productId = e.target.value;
-    alert(this.itemPriceRequests[0].productId);
+  isProductDisabled(id: string) {
+    let usedProducts = this.summaryItems
+      .map((i) => i.productId);
+    return usedProducts.includes(id);
   }
 
-  buyModalDisplay(e) {
-    if (e.target.click) {
-      document.getElementById('myModal').style.display = "block";
-    }
+  handleSelectedProductChange(e, i: number) {
+    this.itemPriceRequests[i].productId = e.target.value;
   }
 
-  dismissModal() {
-    document.getElementById('myModal').style.display = "none";
+  formatMoneyAmount(amount: number) {
+    return (amount / 100).toFixed(2);
   }
 }

@@ -1,5 +1,6 @@
 <div class="price-main-div">
   <div class="main_container-price">
+    <h4 style="text-align: center; font-style: italic;">Change itm counts to update the prices.</h4>
     <table class="table table-bordered">
       <thead class="thead-light">
       <tr class="detail-view-table-header">
@@ -18,17 +19,19 @@
       <tr *ngFor="let item of itemPriceRequests; let i = index" class="detail-view-table-row">
         <td class="center-text">
           <label>
-            <select (click)="selectChangeHandler($event)" class="prod-select">
+            <select (click)="handleSelectedProductChange($event, i)" class="prod-select">
               <!--            <option value="{{getProductName(item.productId)}}">{{getProductName(item.productId)}}</option>-->
-              <option *ngFor="let p of products" value="{{p.productId}}">{{p.productName}}</option>
+              <option *ngFor="let p of products"
+                      [disabled]="isProductDisabled(p.productId)"
+                      [selected]="item.productId === p.productId"
+                      value="{{p.productId}}">{{p.productName}}</option>
             </select>
           </label>
         </td>
         <td class="center-text">
-          <input [(ngModel)]="itemPriceRequests[i].itemCount" type="number" min="1"/>
+          <input [(ngModel)]="item.itemCount" (change)="calculatePrice(i)" type="number" min="1"/>
         </td>
         <td class="center-text">
-          <input (click)="calculatePrice()" class="button ui-button" type="button" value="Calculate Price"/>
           <input (click)="removeItem(i)" class="button remove-btn" type="button" value="Remove"/>
         </td>
       </tr>
@@ -51,29 +54,14 @@
     <div *ngIf="summaryItems.length != 0" class="prod-list">
       <div *ngFor='let it of summaryItems; let i = index'>
         <label class="prod-label"> {{getProductName(summaryItems[i].productId).productName}}:</label>
-        <label class="prod-price">{{summaryItems[i].grossTotal}}</label>
+        <label class="prod-price">{{formatMoneyAmount(summaryItems[i].grossTotal)}}</label>
       </div>
     </div>
     <div class="prod-list">
-      <h3>Order Total: <label class="prod-price">{{this.netTotal | number : '1.2'}}</label></h3>
+      <h3>Order Total: <label class="prod-price">{{formatMoneyAmount(this.netTotal)}}</label></h3>
     </div>
-    <div class="btn`-buy-div">
-      <input type="button" class="button btn-buy" value="Buy Now" id="buyBtn" (click)="buyModalDisplay($event)">
-    </div>
-  </div>
-
-  <div id="myModal" class="modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <span class="close" (click)="dismissModal()">&times;</span>
-        <h2>Proceed to Buy</h2>
-      </div>
-      <div class="modal-body">
-        <h4>Order Net Total: &nbsp;{{netTotal}}</h4>
-      </div>
-      <div class="modal-footer">
-        <input type="button" class="button modal-ok" value="Buy Now" id="modalOkBtn" (click)="dismissModal()">
-      </div>
+    <div class="btn-buy-div">
+      <input type="button" class="button btn-buy" value="Buy Now">
     </div>
   </div>
 </div>
